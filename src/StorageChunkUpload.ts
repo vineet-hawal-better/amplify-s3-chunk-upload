@@ -37,7 +37,6 @@ export class StorageChunkUpload extends AWSS3Provider {
   constructor(config, private credentials: CredentialsClass) {
     super(config);
     this._storageConfig = config ? config : {};
-    this.credentials = credentials;
     logger.debug('Storage Options', this._storageConfig);
   }
   /**

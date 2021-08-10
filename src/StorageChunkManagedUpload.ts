@@ -60,7 +60,6 @@ export class StorageChunkManagedUpload {
 
   constructor(params, private credentials: CredentialsClass, opts, emitter) {
     this.params = params;
-    this.credentials = credentials;
     this.opts = opts;
     this.emitter = emitter;
   }
