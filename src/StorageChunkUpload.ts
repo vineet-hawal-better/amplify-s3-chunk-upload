@@ -58,7 +58,7 @@ export class StorageChunkUpload extends AWSS3Provider {
 
   // upload storage object
   public async put(key: string, object, config?): Promise<S3ProviderPutOutput> {
-    const credentialsOK = this._ensureCredentials();
+    const credentialsOK = await this._ensureCredentials();
     if (!credentialsOK) {
       return Promise.reject('No credentials');
     }
@@ -175,7 +175,7 @@ export class StorageChunkUpload extends AWSS3Provider {
     }
   }
 
-    /**
+  /**
    * @private
    */
   _ensureCredentials() {
