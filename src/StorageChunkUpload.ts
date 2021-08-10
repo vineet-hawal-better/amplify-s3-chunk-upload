@@ -27,6 +27,7 @@ const dispatchStorageEvent = (track: boolean, event: string, attrs: any, metrics
   }
 };
 
+// @ts-ignore
 export class StorageChunkUpload extends AWSS3Provider {
   // category and provider name
   static category = 'Storage';
@@ -57,7 +58,7 @@ export class StorageChunkUpload extends AWSS3Provider {
 
   // upload storage object
   public async put(key: string, object, config?): Promise<S3ProviderPutOutput> {
-    const credentialsOK = this.credentials.get();
+    const credentialsOK = this._ensureCredentials();
     if (!credentialsOK) {
       return Promise.reject('No credentials');
     }
@@ -172,5 +173,25 @@ export class StorageChunkUpload extends AWSS3Provider {
       default:
         return publicPath;
     }
+  }
+
+    /**
+   * @private
+   */
+  _ensureCredentials() {
+    return this.credentials
+      .get()
+      .then((credentials) => {
+        if (!credentials) return false;
+        const cred = this.credentials.shear(credentials);
+        logger.debug('set credentials for storage', cred);
+        this._storageConfig.credentials = cred;
+
+        return true;
+      })
+      .catch((error) => {
+        logger.warn('ensure credentials error', error);
+        return false;
+      });
   }
 }
