@@ -1,5 +1,5 @@
 import { Hub, Logger, Parser, CredentialsClass } from '@aws-amplify/core';
-import { AWSS3Provider, StorageProvider } from '@aws-amplify/storage';
+import { AWSS3Provider, S3ProviderPutOutput } from '@aws-amplify/storage';
 import * as events from 'events';
 import { StorageChunkManagedUpload } from './StorageChunkManagedUpload';
 const logger = new Logger('StorageChunkUpload');
@@ -37,6 +37,7 @@ export class StorageChunkUpload extends AWSS3Provider {
   constructor(config, private credentials: CredentialsClass) {
     super(config);
     this._storageConfig = config ? config : {};
+    this.credentials = credentials;
     logger.debug('Storage Options', this._storageConfig);
   }
   /**
@@ -56,8 +57,8 @@ export class StorageChunkUpload extends AWSS3Provider {
   }
 
   // upload storage object
-  public async put(key: string, object, config?): Promise<Object> {
-    const credentialsOK = await this._ensureCredentials();
+  public async put(key: string, object, config?): Promise<S3ProviderPutOutput> {
+    const credentialsOK = this.credentials.get();
     if (!credentialsOK) {
       return Promise.reject('No credentials');
     }
@@ -172,25 +173,5 @@ export class StorageChunkUpload extends AWSS3Provider {
       default:
         return publicPath;
     }
-  }
-
-  /**
-   * @private
-   */
-  _ensureCredentials() {
-    return this.credentials
-      .get()
-      .then((credentials) => {
-        if (!credentials) return false;
-        const cred = this.credentials.shear(credentials);
-        logger.debug('set credentials for storage', cred);
-        this._storageConfig.credentials = cred;
-
-        return true;
-      })
-      .catch((error) => {
-        logger.warn('ensure credentials error', error);
-        return false;
-      });
   }
 }
