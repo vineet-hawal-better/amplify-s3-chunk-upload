@@ -111,7 +111,7 @@ export class StorageChunkUpload extends AWSS3Provider {
     }
 
     const emitter = new events.EventEmitter();
-    const uploader = new StorageChunkManagedUpload(params, this.credentials, opt, emitter);
+    const uploader = new StorageChunkManagedUpload(params, opt, emitter);
 
     if (acl) {
       params.ACL = acl;
