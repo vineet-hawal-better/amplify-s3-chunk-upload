@@ -1,5 +1,5 @@
 import { Hub, Logger, Parser, CredentialsClass } from '@aws-amplify/core';
-import { AWSS3Provider, S3ProviderPutOutput } from '@aws-amplify/storage';
+import { AWSS3Provider } from '@aws-amplify/storage';
 import * as events from 'events';
 import { StorageChunkManagedUpload } from './StorageChunkManagedUpload';
 const logger = new Logger('StorageChunkUpload');
@@ -57,7 +57,7 @@ export class StorageChunkUpload extends AWSS3Provider {
   }
 
   // upload storage object
-  public async put(key: string, object, config?): Promise<S3ProviderPutOutput> {
+  public async put(key: string, object, config?): Promise<Object> {
     const credentialsOK = await this._ensureCredentials();
     if (!credentialsOK) {
       return Promise.reject('No credentials');
