@@ -51,8 +51,8 @@ import {
 	StorageLevel,
 	CustomPrefix,
 	S3ProviderRemoveOutput,
-} from '../types';
-import { StorageErrorStrings } from '../common/StorageErrorStrings';
+} from './types';
+import { StorageErrorStrings } from './common/StorageErrorStrings';
 import { StorageChunkManagedUpload } from './StorageChunkManagedUpload';
 import * as events from 'events';
 import { CancelTokenSource } from 'axios';
